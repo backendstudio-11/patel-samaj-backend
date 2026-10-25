@@ -1,0 +1,278 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="gu">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>શ્રી લેઉવા પટેલ સમાજ - બીલડી</title>
+    <style type="text/css">
+        @font-face {
+            font-family: 'Noto Sans Gujarati';
+            src: url('data:font/truetype;charset=utf-8;base64,[(${notoSansRegularBase64})]') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Noto Sans Gujarati';
+            src: url('data:font/truetype;charset=utf-8;base64,[(${notoSansBoldBase64})]') format('truetype');
+            font-weight: bold;
+            font-style: normal;
+        }
+
+        @page {
+            size: A4 portrait;
+            margin: 8mm;
+        }
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Noto Sans Gujarati', sans-serif;
+            color: #d32f2f; /* Deep red ink matching physical receipt page */
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+            font-size: 9.5pt;
+        }
+        .receipt-page {
+            border: 2px solid #d32f2f;
+            width: 100%;
+            box-sizing: border-box;
+            page-break-inside: avoid;
+            margin-bottom: 0;
+        }
+        .page-break {
+            page-break-before: always;
+        }
+
+        .header-gods {
+            padding: 8px 12px 0px 12px;
+            width: 100%;
+            display: table;
+            font-weight: bold;
+            font-size: 9pt;
+            margin-bottom: 3px;
+        }
+        .header-gods-left { display: table-cell; text-align: left; width: 33%; }
+        .header-gods-center { display: table-cell; text-align: center; width: 34%; }
+        .header-gods-right { display: table-cell; text-align: right; width: 33%; }
+
+        .badge-container {
+            text-align: center;
+            margin-bottom: 4px;
+        }
+        .badge {
+            border: 1px solid #d32f2f;
+            border-radius: 20px;
+            padding: 1px 16px;
+            display: inline-block;
+            font-weight: bold;
+            font-size: 10pt;
+        }
+        .main-title {
+            text-align: center;
+            font-size: 21pt;
+            font-weight: bold;
+            margin-top: 2px;
+            margin-bottom: 8px;
+            background-color: #d32f2f;
+            color: white;
+            padding: 4px 0;
+            border-radius: 0px;
+            letter-spacing: 0.5px;
+        }
+        .info-section {
+            padding: 0px 10px;
+            width: 100%;
+            display: table;
+            margin-bottom: 6px;
+            font-size: 10pt;
+            font-weight: bold;
+        }
+        .info-row { display: table-row; }
+        .info-cell-label { display: table-cell; white-space: nowrap; padding-right: 5px; }
+        .info-cell-value {
+            display: table-cell;
+            border-bottom: 1px dotted #d32f2f;
+            color: #000000;
+        }
+
+        table.items-table {
+            width: 100%;
+            border-collapse: collapse;
+            border-top: 2px solid #d32f2f;
+            border-bottom: 2px solid #d32f2f;
+            border-left: none;
+            border-right: none;
+            margin-bottom: 4px;
+            table-layout: fixed;
+            -fs-table-paginate: paginate;
+        }
+        table.items-table thead {
+            display: table-header-group;
+        }
+        table.items-table tr {
+            page-break-inside: avoid;
+        }
+        table.items-table th, table.items-table td {
+            border: 1px solid #d32f2f;
+            padding: 2px 3px;
+            height: 19px;
+            font-size: 9pt;
+            overflow: hidden;
+            vertical-align: middle;
+        }
+        table.items-table th {
+            background-color: #fce4e4;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        /* Isolation Rule: Wrap item name only */
+        .item-name {
+            white-space: normal;
+            line-height: 1.1;
+            color: #000000;
+            font-weight: bold;
+        }
+        /* All amount elements remain locked on a single line */
+        .amount-lock {
+            white-space: nowrap;
+            color: #000000;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .col-separator {
+            border-right: 2px solid #d32f2f !important;
+        }
+        .text-center { text-align: center; }
+
+        .footer-section {
+            width: 100%;
+            display: table;
+            padding: 6px 10px 8px 10px;
+            font-weight: bold;
+            font-size: 10pt;
+            margin-top: 2px;
+            page-break-inside: avoid;
+        }
+        .footer-left { display: table-cell; width: 55%; vertical-align: top; }
+        .footer-right { display: table-cell; width: 45%; vertical-align: top; }
+        .line-input { border-bottom: 1px solid #d32f2f; display: inline-block; color: #000000; padding-left: 5px; }
+        .small-print { font-size: 8.5pt; font-weight: normal; margin-top: 2px; }
+    </style>
+</head>
+<body>
+
+<div th:each="page, pageStat : ${pages}"
+     class="receipt-page"
+     th:classappend="${!pageStat.first} ? 'page-break' : ''">
+
+    <!-- Page 1 Header (Rendered ONLY on the first page) -->
+    <div th:if="${page.isFirstPage}">
+        <!-- Deity Header -->
+        <div class="header-gods">
+            <div class="header-gods-left">॥ શ્રી ગણેશાય નમઃ ॥</div>
+            <div class="header-gods-center">॥ શ્રી બિલેશ્વર દાદા ॥</div>
+            <div class="header-gods-right">॥ શ્રી ખોડીયાર માતાજી ॥</div>
+        </div>
+
+        <div class="badge-container">
+            <div class="badge">વાસણ ભાડાની પહોંચ</div>
+        </div>
+
+        <div class="main-title">
+            ❋ શ્રી લેઉવા પટેલ સમાજ - બીલડી ❋
+        </div>
+
+        <!-- Customer Details Meta Row 1 -->
+        <div class="info-section">
+            <div class="info-row">
+                <div class="info-cell-label" style="width: 13%;">ભાડે લેનારનું નામ :</div>
+                <div class="info-cell-value" style="width: 57%;" th:text="${event.familyHeadName}">દિનેશભાઈ પરસોત્તમભાઈ પટેલ</div>
+                <div class="info-cell-label" style="width: 5%; text-align: right;">તા. :</div>
+                <div class="info-cell-value" style="width: 25%;" th:text="${eventDateGujarati}">૨૦-૦૬-૨૦૨૬</div>
+            </div>
+        </div>
+
+        <!-- Customer Details Meta Row 2 -->
+        <div class="info-section">
+            <div class="info-row">
+                <div class="info-cell-label" style="width: 6%;">પ્રસંગ :</div>
+                <div class="info-cell-value" style="width: 34%;" th:text="${event.eventType}">દીકરાના લગ્ન પ્રસંગ</div>
+                <div class="info-cell-label" style="width: 6%; text-align: center;">મોબાઈલ નંબર :</div>
+                <div class="info-cell-value" style="width: 34%;" th:text="${contactNumberGujarati}">૯૮૯૮૯૮૯૮૯૮</div>
+                <div class="info-cell-label" style="width: 8%; text-align: right;">નંબર :</div>
+                <div class="info-cell-value" style="width: 12%; text-align: center; font-size: 10.5pt; font-weight: bold;" th:text="${billNumberGujarati}">૪૪૭</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Subsequent Pages Header (Page 2, 3...) -->
+    <div th:if="${!page.isFirstPage}">
+        <!-- Deity Header -->
+        <div class="header-gods">
+            <div class="header-gods-left">॥ શ્રી ગણેશાય નમઃ ॥</div>
+            <div class="header-gods-center">॥ શ્રી બિલેશ્વર દાદા ॥</div>
+            <div class="header-gods-right">॥ શ્રી ખોડીયાર માતાજી ॥</div>
+        </div>
+
+        <div class="main-title">
+            ❋ શ્રી લેઉવા પટેલ સમાજ - બીલડી ❋
+        </div>
+    </div>
+
+    <!-- Symmetric 5-Column Left and 5-Column Right Matrix Sheet Layout -->
+    <table class="items-table">
+        <thead>
+        <tr>
+            <th style="width: 5%;">ક્રમ</th>
+            <th style="width: 25%;">વસ્તુનું નામ</th>
+            <th style="width: 8%;">૧ નંગનું<br/>ભાડું</th>
+            <th style="width: 5.5%;">કુલ નંગ</th>
+            <th class="col-separator" style="width: 6.5%;">રકમ (રૂા.)</th>
+
+            <th style="width: 5%;">ક્રમ</th>
+            <th style="width: 25%;">વસ્તુનું નામ</th>
+            <th style="width: 8%;">૧ નંગનું<br/>ભાડું</th>
+            <th style="width: 5.5%;">કુલ નંગ</th>
+            <th style="width: 6.5%;">રકમ (રૂા.)</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="row : ${page.rows}">
+            <!-- Column Set 1: Left Side -->
+            <td class="text-center" th:text="${row.srNoLeft}">૧</td>
+            <td class="item-name" th:text="${row.nameLeft}">ડીશ સેટ</td>
+            <td class="amount-lock" th:text="${row.rateLeft}">૫</td>
+            <td class="amount-lock" th:text="${row.qtyLeft}">૫૦૦</td>
+            <td class="amount-lock col-separator" th:text="${row.rupeesLeft}">૨૫૦૦</td>
+
+            <!-- Column Set 2: Right Side -->
+            <td class="text-center" th:text="${row.srNoRight}">૩૧</td>
+            <td class="item-name" th:text="${row.nameRight}">તવો લોખંડનો</td>
+            <td class="amount-lock" th:text="${row.rateRight}">૫૦</td>
+            <td class="amount-lock" th:text="${row.qtyRight}">૨</td>
+            <td class="amount-lock" th:text="${row.rupeesRight}">૧૦૦</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Bottom Balanced Summary Balances Footer Row (Rendered ONLY on the last page) -->
+    <div th:if="${page.isLastPage}" class="footer-section">
+        <div class="footer-left">
+            <div style="margin-bottom: 8px;">અંકે રૂપિયા : <span class="line-input" style="width: 75%;" th:text="${totalAmountInWords}">સાડત્રીસ હજાર બસો પચાસ પૂરા</span></div>
+            <div style="margin-bottom: 18px;">લેનારની સહી : <span class="line-input" style="width: 73%;"></span></div>
+            <div class="small-print">ભૂલચૂક લેવીદેવી.</div>
+            <div class="small-print">સમાજના નિયમોને આધીન.</div>
+        </div>
+        <div class="footer-right">
+            <div style="margin-bottom: 6px; text-align: right;">કુલ ટોટલ રૂપિયા : <span class="line-input" style="width: 50%; text-align: left; font-weight: bold;" th:text="${totalAmountGujaratiDigits}">૩૭૨૫૦</span></div>
+            <div style="margin-bottom: 6px; text-align: right;">ડીપોઝીટ બાદ : <span class="line-input" style="width: 54%;"></span></div>
+            <div style="margin-bottom: 18px; text-align: right;">વધઘટ રૂપિયા : <span class="line-input" style="width: 54%;"></span></div>
+            <div style="text-align: right;">વસુલ કરનારની સહી : <span class="line-input" style="width: 45%;"></span></div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
