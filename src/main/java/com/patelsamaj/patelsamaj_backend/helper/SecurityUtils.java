@@ -4,15 +4,22 @@ import com.patelsamaj.patelsamaj_backend.model.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-public class SecurityUtils {
-    public static int getAuthenticatedUserId() {
+import java.util.Optional;
+
+public final class SecurityUtils {
+
+    private SecurityUtils() {
+    }
+
+    public static Optional<Integer> getCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication != null && authentication.getPrincipal() instanceof User) {
-            User loggedInUser = (User) authentication.getPrincipal();
-            return loggedInUser.getUserId() != null ? loggedInUser.getUserId() : 1;
+        if (authentication != null && authentication.getPrincipal() instanceof User user) {
+            return Optional.ofNullable(user.getUserId());
         }
+        return Optional.empty();
+    }
 
-        return 1;
+    public static int getAuthenticatedUserId() {
+        return getCurrentUserId().orElse(1);
     }
 }
