@@ -14,7 +14,7 @@ import java.util.List;
 @Repository
 public interface ExpenseRepository extends JpaRepository<Expense, Integer> {
 
-    @Query("SELECT new com.patelsamaj.patelsamaj_backend.dto.DailyExpenseSummaryDTO(e.expenseDate, SUM(e.amount)) " +
+    @Query("SELECT e.expenseDate AS date, SUM(e.amount) AS totalSpent " +
             "FROM Expense e " +
             "GROUP BY e.expenseDate " +
             "ORDER BY e.expenseDate DESC")
