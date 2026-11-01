@@ -18,7 +18,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.time.LocalDateTime;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -38,7 +39,17 @@ class AuthControllerTest {
     private UserService userService;
 
     @Spy
-    private JwtProperties jwtProperties = new JwtProperties();
+    private JwtProperties jwtProperties = createJwtProperties();
+
+    private static JwtProperties createJwtProperties() {
+        JwtProperties props = new JwtProperties();
+        props.setCookieName("refreshToken");
+        props.setCookiePath("/api/auth");
+        props.setCookieSecure(true);
+        props.setCookieSameSite("Lax");
+        props.setRefreshExpirationMs(604800000L);
+        return props;
+    }
 
     @InjectMocks
     private AuthController authController;
@@ -55,7 +66,7 @@ class AuthControllerTest {
         AuthResponse authResponse = AuthResponse.builder()
                 .jwtToken("access-token-123")
                 .refreshToken("refresh-token-abc")
-                .expireAt(LocalDateTime.now().plusHours(1))
+                .expireAt(Instant.now().plus(Duration.ofHours(1)))
                 .build();
 
         when(authService.login(any(AuthenticationDTO.class))).thenReturn(Optional.of(authResponse));
@@ -77,7 +88,7 @@ class AuthControllerTest {
         AuthResponse authResponse = AuthResponse.builder()
                 .jwtToken("new-access-token-456")
                 .refreshToken("new-refresh-token-def")
-                .expireAt(LocalDateTime.now().plusHours(1))
+                .expireAt(Instant.now().plus(Duration.ofHours(1)))
                 .build();
 
         when(authService.refreshToken("sample-cookie-token")).thenReturn(Optional.of(authResponse));

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -54,7 +55,7 @@ public class AuthServiceImpl implements AuthService {
                 .build();
         refreshTokenRepository.save(entity);
 
-        LocalDateTime expireAt = LocalDateTime.now()
+        Instant expireAt = Instant.now()
                 .plus(Duration.ofMillis(jwtProperties.getExpirationMs()));
 
         AuthResponse response = AuthResponse.builder()
@@ -101,7 +102,7 @@ public class AuthServiceImpl implements AuthService {
 
         String jwtToken = tokenService.generateJWTToken(user);
 
-        LocalDateTime expireAt = LocalDateTime.now()
+        Instant expireAt = Instant.now()
                 .plus(Duration.ofMillis(jwtProperties.getExpirationMs()));
 
         AuthResponse response = AuthResponse.builder()
